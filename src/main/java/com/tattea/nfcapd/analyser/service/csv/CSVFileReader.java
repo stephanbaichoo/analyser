@@ -41,12 +41,29 @@ public class CSVFileReader {
             e.printStackTrace();
         }
 
-        return records.stream()
+        var objects = records.stream()
                 .skip(1) // skip header
                 .filter(strings -> !startWithIllegalWords(String.join("", strings)))
                 .map(strings -> strings.stream()
                         .filter(t -> !StringUtils.isEmpty(t))
                         .filter(t -> !t.contains("->"))
+                        .collect(Collectors.toList()))
+                .collect(Collectors.toList());
+
+        return objects.stream()
+                .map(strings -> {
+                    String[] toArray = strings.toArray(String[]::new);
+
+                    for (int i = 0; i < toArray.length; i++) {
+                        if (toArray[i].equals("M")) {
+                            toArray[i - 1] = toArray[i - 1].concat("M");
+                            toArray[i] = "";
+                        }
+                    }
+                    return List.of(toArray);
+                })
+                .map(strings -> strings.stream()
+                        .filter(t -> !StringUtils.isEmpty(t))
                         .collect(Collectors.toList()))
                 .map(this::buildNetflow)
                 .collect(Collectors.toList());
@@ -58,21 +75,15 @@ public class CSVFileReader {
                 .timeFirstSeen(LocalTime.parse(csvRow.get(1)))
                 .duration(new BigDecimal(csvRow.get(2)))
                 .protocol(csvRow.get(3))
-                .srcIp(Netflow.IP.builder()
-                        .ip(getIp(csvRow.get(4)))
-                        .port(getPort(csvRow.get(4)))
-                        .build())
-                .dstIp(Netflow.IP.builder()
-                        .ip(getIp(csvRow.get(5)))
-                        .port(getPort(csvRow.get(5)))
-                        .build())
+                .srcIp(csvRow.get(4))
+                .dstIp(csvRow.get(5))
                 .flags(csvRow.get(6))
                 .tos(Integer.valueOf(csvRow.get(7)))
                 .packetNo(Integer.valueOf(csvRow.get(8)))
-                .bytes(new BigDecimal(csvRow.get(9)))
+                .bytes(csvRow.get(9))
                 .pps(csvRow.get(10))
-                .bps(new BigDecimal(csvRow.get(11)))
-                .Bpp(csvRow.get(12))
+                .bps(csvRow.get(11))
+                .Bpp(Long.parseLong(csvRow.get(12)))
                 .flows(csvRow.get(13))
                 .build();
     }

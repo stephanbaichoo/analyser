@@ -37,13 +37,11 @@ public class Netflow {
     @Column(name = "protocol")
     private String protocol;
 
-    @Embedded
     @Column(name = "src_ip")
-    private IP srcIp;
+    private String srcIp;
 
-    @Embedded
     @Column(name = "dst_ip")
-    private IP dstIp;
+    private String dstIp;
 
     @Column(name = "flags")
     private String flags;
@@ -55,16 +53,16 @@ public class Netflow {
     private Integer packetNo;
 
     @Column(name = "bytes")
-    private BigDecimal bytes;
+    private String bytes;
 
     @Column(name = "pps")
     private String pps;
 
     @Column(name = "bps")
-    private BigDecimal bps;
+    private String bps;
 
     @Column(name = "bpp")
-    private String Bpp;
+    private Long Bpp;
 
     @Column(name = "flows")
     private String flows;
