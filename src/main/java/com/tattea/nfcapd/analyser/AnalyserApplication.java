@@ -22,6 +22,6 @@ public class AnalyserApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        csvReader.getNetflows();
+        csvReader.getNetflows().forEach(System.out::println);
     }
 }

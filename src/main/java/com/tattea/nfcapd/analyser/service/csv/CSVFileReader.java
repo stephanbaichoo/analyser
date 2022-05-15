@@ -73,7 +73,7 @@ public class CSVFileReader {
                 .pps(csvRow.get(10))
                 .bps(new BigDecimal(csvRow.get(11)))
                 .Bpp(csvRow.get(12))
-                .flows(Integer.valueOf(csvRow.get(13)))
+                .flows(csvRow.get(13))
                 .build();
     }
 

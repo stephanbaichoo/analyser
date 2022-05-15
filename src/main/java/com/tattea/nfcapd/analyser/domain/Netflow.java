@@ -67,7 +67,7 @@ public class Netflow {
     private String Bpp;
 
     @Column(name = "flows")
-    private Integer flows;
+    private String flows;
 
     enum Protocol {
         TCP,
