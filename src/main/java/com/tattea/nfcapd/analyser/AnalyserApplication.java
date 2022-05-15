@@ -1,6 +1,7 @@
 package com.tattea.nfcapd.analyser;
 
 import com.tattea.nfcapd.analyser.service.csv.CSVFileReader;
+import com.tattea.nfcapd.analyser.service.csv.NetflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,9 +12,12 @@ public class AnalyserApplication implements CommandLineRunner {
 
     private final CSVFileReader csvReader;
 
+    private final NetflowService netflowService;
+
     @Autowired
-    public AnalyserApplication(CSVFileReader csvReader) {
+    public AnalyserApplication(CSVFileReader csvReader, NetflowService netflowService) {
         this.csvReader = csvReader;
+        this.netflowService = netflowService;
     }
 
     public static void main(String[] args) {
@@ -22,6 +26,8 @@ public class AnalyserApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        csvReader.getNetflows().forEach(System.out::println);
+        //csvReader.getNetflows().forEach(System.out::println);
+
+        netflowService.saveNetflows(csvReader.getNetflows());
     }
 }
