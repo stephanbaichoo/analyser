@@ -3,6 +3,7 @@ package com.tattea.nfcapd.analyser.service.csv;
 import com.tattea.nfcapd.analyser.domain.Netflow;
 import com.tattea.nfcapd.analyser.model.TrafficBytes;
 import com.tattea.nfcapd.analyser.repository.NetflowRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class NetflowService {
 
     private NetflowRepository netflowRepository;
@@ -21,6 +23,7 @@ public class NetflowService {
     }
 
     public void saveNetflows(List<Netflow> netflows) {
+        log.info("Netflow Saving ... {}", netflows);
         netflows.forEach(netflowRepository::save);
     }
 

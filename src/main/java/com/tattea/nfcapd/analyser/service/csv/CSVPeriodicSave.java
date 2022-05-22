@@ -1,5 +1,6 @@
 package com.tattea.nfcapd.analyser.service.csv;
 
+import com.tattea.nfcapd.analyser.domain.FileRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,26 +23,37 @@ public class CSVPeriodicSave {
 
     private final NetflowService netflowService;
 
+    private final FileRegistryService fileRegistryService;
+
     private static final String csvDirectory = "C:\\Users\\steph\\Documents\\Projects\\analyser\\src\\main\\resources\\static";
 
     private static final String CSV = "csv";
 
     @Autowired
-    public CSVPeriodicSave(CSVFileReader csvFileReader, NetflowService netflowService) {
+    public CSVPeriodicSave(CSVFileReader csvFileReader, NetflowService netflowService, FileRegistryService fileRegistryService) {
         this.csvFileReader = csvFileReader;
         this.netflowService = netflowService;
+        this.fileRegistryService = fileRegistryService;
     }
 
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void triggerAllCSVSave() {
         log.info("CSV Save at : {}", LocalDateTime.now().toString());
-        getAllCSVFromDirectory().stream()
+
+        getAllUnsavedCSVFromDirectory().stream()
                 .map(File::getAbsolutePath)
                 .map(csvFileReader::getNetflows)
                 .forEach(netflowService::saveNetflows);
+
+        getAllUnsavedCSVFromDirectory().stream()
+                .map(file -> FileRegistry.builder()
+                        .fileName(file.getName())
+                        .timeSaved(LocalDateTime.now())
+                        .build())
+                .forEach(fileRegistryService::saveFileRegistry);
     }
 
-    public List<File> getAllCSVFromDirectory() {
+    public List<File> getAllUnsavedCSVFromDirectory() {
         return Stream.of(csvDirectory)
                 .map(File::new)
                 .map(File::listFiles)
@@ -49,6 +61,7 @@ public class CSVPeriodicSave {
                 .flatMap(Arrays::stream)
                 .filter(File::isFile)
                 .filter(file -> FilenameUtils.getExtension(file.getName()).equals(CSV))
+                .filter(file -> !fileRegistryService.isFileAlreadyProcessed(file.getName()))
                 .collect(Collectors.toList());
     }
 
