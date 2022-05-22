@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class AnalyserApplication implements CommandLineRunner {
 
     private final CSVFileReader csvReader;
@@ -28,6 +30,6 @@ public class AnalyserApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //csvReader.getNetflows().forEach(System.out::println);
 
-        netflowService.saveNetflows(csvReader.getNetflows());
+        //netflowService.saveNetflows(csvReader.getNetflows());
     }
 }

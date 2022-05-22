@@ -1,9 +1,9 @@
 package com.tattea.nfcapd.analyser.exception;
 
-public class ApplicationException extends RuntimeException {
+import lombok.NoArgsConstructor;
 
-    public ApplicationException() {
-    }
+@NoArgsConstructor
+public class ApplicationException extends RuntimeException {
 
     public ApplicationException(String message) {
         super(message);

@@ -28,7 +28,7 @@ public class CSVFileReader {
     public CSVFileReader() {
     }
 
-    public List<Netflow> getNetflows() {
+    public List<Netflow> getNetflows(String csvPath) {
         List<List<String>> records = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
@@ -69,6 +69,10 @@ public class CSVFileReader {
                 .collect(Collectors.toList());
     }
 
+    public List<Netflow> getNetflows() {
+        return getNetflows(csvPath);
+    }
+
     private Netflow buildNetflow(List<String> csvRow) {
         return Netflow.builder()
                 .dateFirstSeen(LocalDate.parse(csvRow.get(0)))
@@ -90,14 +94,6 @@ public class CSVFileReader {
 
     private boolean startWithIllegalWords(String s) {
         return List.of("Summary", "Time", "Total", "Sys").stream().anyMatch(s::startsWith);
-    }
-
-    private String getIp(String s) {
-        return s.split(":")[0];
-    }
-
-    private Integer getPort(String s) {
-        return Double.valueOf(s.split(":")[1]).intValue();
     }
 
 }
