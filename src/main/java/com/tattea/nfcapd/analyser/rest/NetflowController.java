@@ -22,5 +22,10 @@ public class NetflowController {
     public List<TrafficBytes> getBusyTraffic() {
         return netflowService.getBusyTraffic();
     }
+    
+        @GetMapping("/tattea")
+    public String getTattea() {
+        return "Tattea";
+    }
 
 }

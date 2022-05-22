@@ -25,7 +25,7 @@ public class CSVPeriodicSave {
 
     private final FileRegistryService fileRegistryService;
 
-    private static final String csvDirectory = "C:\\Users\\steph\\Documents\\Projects\\analyser\\src\\main\\resources\\static";
+    private static final String csvDirectory = "/home/tattea/test";
 
     private static final String CSV = "csv";
 
@@ -36,7 +36,7 @@ public class CSVPeriodicSave {
         this.fileRegistryService = fileRegistryService;
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/20 * * * * *")
     public void triggerAllCSVSave() {
         log.info("CSV Save at : {}", LocalDateTime.now().toString());
 
