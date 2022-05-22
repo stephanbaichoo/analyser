@@ -40,12 +40,14 @@ public class CSVPeriodicSave {
     public void triggerAllCSVSave() {
         log.info("CSV Save at : {}", LocalDateTime.now().toString());
 
-        getAllUnsavedCSVFromDirectory().stream()
+        getAllUnsavedCSVFromDirectory()
+                .stream()
                 .map(File::getAbsolutePath)
                 .map(csvFileReader::getNetflows)
                 .forEach(netflowService::saveNetflows);
 
-        getAllUnsavedCSVFromDirectory().stream()
+        getAllUnsavedCSVFromDirectory()
+                .stream()
                 .map(file -> FileRegistry.builder()
                         .fileName(file.getName())
                         .timeSaved(LocalDateTime.now())

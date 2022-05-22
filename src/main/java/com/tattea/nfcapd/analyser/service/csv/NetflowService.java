@@ -23,7 +23,7 @@ public class NetflowService {
     }
 
     public void saveNetflows(List<Netflow> netflows) {
-        log.info("Netflow Saving ... {}", netflows);
+        //log.info("Netflow Saving ... {}", netflows);
         netflows.forEach(netflowRepository::save);
     }
 
